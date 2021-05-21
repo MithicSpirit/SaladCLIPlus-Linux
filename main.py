@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import os
 import json
@@ -9,42 +10,25 @@ except ModuleNotFoundError:
     pass
 
 
-def print_referral(referral):
-    try:
-        pyperclip.copy(
-            'Join me on Salad and use code ' + str(referral['code']) + ' for a 2x earning rate bonus!'
-                                                                       ' https://www.salad.io')
-        print('Code copied to clipboard!')
-    except FileNotFoundError:
-        input("an error occured with copying the referral to your clip board")
-
-
 def setup():
     sys.stdout.write("\x1b]2;Salad CLI+ SETUP\x07")
     salad_key = input("Insert your salad Authentication token: ")
-    wallet = input("Insert your salad wallet address: ")
-    data = {"salad_key": salad_key,
-            "wallet": wallet
-            }
+    eth_wallet = input("Insert your salad  Ethereum wallet address: ")
+    mon_wallet = input("Insert your salad Monero wallet address: ")
+    data = {"salad_key": salad_key, "eth_wallet": eth_wallet, "mon_wallet": mon_wallet}
     with open("config.json", "w+") as file:
         json.dump(data, file)
-    python_var = input("\nEnter the name of your python prefix (for example \"python3\"): ")
-    print("installing required libraries")
-    os.system(f"{python_var} -m pip install --upgrade pip")
-    os.system(f"{python_var} -m pip install pyperclip")
-    os.system(f"{python_var} -m pip install python-dateutil")
-    os.system(f"{python_var} -m pip install argparse")
-    os.system(f"{python_var} -m pip install requests")
 
 
-switch = {
-    1: "Balance.Salad_Balance()",
-    2: "Lifetime.Salad_Lifetime()",
-    3: "XP.Salad_XP()",
-    4: "salad_earnings_update.Salad_Earnings()",
-    5: "print_referral(info[1])",
-    6: "Mining.Salad_Mining()"
-}
+options = [
+    "Balance.Salad_Balance()",
+    "Lifetime.Salad_Lifetime()",
+    "XP.Salad_XP()",
+    "salad_earnings_update.Salad_Earnings()",
+    "Mining.Salad_Mining()",
+    "exit()",
+]
+switch = {i: option for i, option in enumerate(options)}
 
 try:
     with open("config.json") as file:
@@ -58,14 +42,13 @@ from utils import Mining
 from utils import XP
 from utils import Lifetime
 from utils import salad_earnings_update
-import pyperclip
 
 while True:
     info = Start.get_info()
     dun = False
     while not dun:
         # os.system('clear')
-        action = Start.starting(info)
+        action = Start.starting(info, options)
         try:
             int(action)
             dun = True
