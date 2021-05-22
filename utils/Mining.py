@@ -62,8 +62,8 @@ def Salad_Mining():
         os.system("clear")
         sys.stdout.write("\x1b]2;Mining ethash with ethminer\x07")
         os.system(
-            rf"miners/ethminer/ethminer -P stratum+tcp://{eth_wallet}@daggerhashimoto.usa.nicehash.com:3353 -G"
+            rf"miners/ethminer/ethminer -P stratum+tcp://{eth_wallet}@daggerhashimoto.usa.nicehash.com:3353 -G --tstart 55 --tstop 65"
         )
-    else:
-        print("Quitting...")
-        time.sleep(1)
+    print("Quitting...")
+    time.sleep(3)
+    exit(0)
